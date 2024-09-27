@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.7/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="{{asset('backend/assets/css/bootstrap-iconpicker.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-iconpicker.min.css') }}">
 
     <meta name="csrf_token" content="{{ csrf_token() }}" />
 
@@ -90,7 +90,7 @@
     <script src="//cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('backend/assets/js/bootstrap-iconpicker.bundle.min.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('backend/assets/js/page/index-0.js') }}"></script>
@@ -156,10 +156,13 @@
 
 
                                 } else if (data.status == 'error') {
-                                    Swal.fire({
-                                        title: "Can't Delete!",
-                                        text: data.message,
-                                    });
+                                    Swal.fire(
+                                        "can't Delete",
+                                        data.message,
+                                        'error'
+                                    );
+
+
                                 }
 
 

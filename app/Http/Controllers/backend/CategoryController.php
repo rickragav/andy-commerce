@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\DataTables\CategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Str;
 
@@ -32,7 +33,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'icon' => ['required','not_in:empty'],
+            'icon' => ['required', 'not_in:empty'],
             'name' => ['required', 'max:200', 'unique:categories,name'],
             'status' => ['required'],
         ]);
@@ -45,7 +46,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        toastr('Created Sucessfully..','success');
+        toastr('Created Sucessfully..', 'success');
 
         return redirect()->route('admin.category.index');
     }
@@ -64,7 +65,7 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
-        return  view('admin.category.edit', compact('category'));
+        return view('admin.category.edit', compact('category'));
     }
 
     /**
@@ -73,8 +74,8 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'icon' => ['required','not_in:empty'],
-            'name' => ['required', 'max:200', 'unique:categories,name,'.$id],
+            'icon' => ['required', 'not_in:empty'],
+            'name' => ['required', 'max:200', 'unique:categories,name,' . $id],
             'status' => ['required'],
         ]);
 
@@ -86,7 +87,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        toastr('Updated Sucessfully..','success');
+        toastr('Updated Sucessfully..', 'success');
 
         return redirect()->route('admin.category.index');
     }
@@ -98,16 +99,22 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
 
+        $subCategory = SubCategory::where('category_id', $category->id)->count();
+
+        if ($subCategory > 0) {
+            return response(['status' => 'error', 'message' => 'This items contains subitems for delete this you have to delete the sub items first!']);
+        }
+
         $category->delete();
 
         return response(['status' => 'success', 'message' => 'Deleted Succuessfully!']);
     }
 
-    public function changeStatus(Request $request){
-
+    public function changeStatus(Request $request)
+    {
         $category = Category::findOrFail($request->id);
 
-        $category->status = $request->status == 'true' ? 1:0;
+        $category->status = $request->status == 'true' ? 1 : 0;
 
         $category->save();
 
